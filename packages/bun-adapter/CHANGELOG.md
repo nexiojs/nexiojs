@@ -1,5 +1,13 @@
 # @nexiojs/bun-adapter
 
+## 0.0.3
+
+### Patch Changes
+
+- 256a696: use native querystring
+- Updated dependencies [256a696]
+  - @nexiojs/common@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
