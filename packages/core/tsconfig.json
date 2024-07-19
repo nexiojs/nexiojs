@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./"
+  },
+  "include": ["src", "test", "../common/src/is-constructor.ts", "../common/src/is-function.ts"]
+}

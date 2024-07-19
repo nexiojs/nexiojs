@@ -1,0 +1,58 @@
+{
+  "name": "@nexiojs/graphql",
+  "type": "module",
+  "version": "0.0.1",
+  "devDependencies": {
+    "@apollo/server": "^4.10.4",
+    "@apollo/subgraph": "^2.8.3",
+    "@types/bun": "latest",
+    "@types/lodash.merge": "^4.6.9",
+    "typescript": "^5.5.3"
+  },
+  "peerDependencies": {
+    "@apollo/gateway": "^2.8.3",
+    "@apollo/server": "^4.10.4",
+    "@apollo/subgraph": "^2.8.3",
+    "graphql": "^16.9.0"
+  },
+  "dependencies": {
+    "@graphql-tools/merge": "^9.0.4",
+    "@graphql-tools/schema": "^10.0.4",
+    "@graphql-tools/utils": "^10.3.2",
+    "@nexiojs/common": "workspace:*",
+    "@nexiojs/core": "workspace:*",
+    "graphql-tag": "^2.12.6",
+    "lodash.merge": "^4.6.2",
+    "reflect-metadata": "^0.2.2"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsup --config ../../config.ts"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typings": "dist/index.d.ts",
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  }
+}

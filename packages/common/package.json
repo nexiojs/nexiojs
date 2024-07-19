@@ -1,0 +1,46 @@
+{
+  "name": "@nexiojs/common",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsup --config ../../config.ts"
+  },
+  "devDependencies": {
+    "@types/lodash.merge": "^4.6.9"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "lodash.merge": "^4.6.2",
+    "querystring": "^0.2.1",
+    "reflect-metadata": "^0.2.2"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typings": "dist/index.d.ts",
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  }
+}

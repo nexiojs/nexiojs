@@ -1,0 +1,19 @@
+{
+  "name": "workspace",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "release": "changeset publish",
+    "build:common": "pnpm run --filter=@nexiojs/common build",
+    "build:core": "pnpm run --filter=@nexiojs/core build",
+    "build": "pnpm build:common && pnpm build:core && pnpm run --filter=\\!@nexiojs/core --filter=\\!@nexiojs/common build"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.7",
+    "@types/bun": "^1.1.6",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.1.2",
+    "typescript": "^5.5.3"
+  }
+}
