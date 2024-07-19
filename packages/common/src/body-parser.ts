@@ -1,4 +1,4 @@
-import { parse } from "querystring";
+import { parse } from "node:querystring";
 
 export const bodyParser = async (req: Request) => {
   const contentType = req.headers.get("content-type");
