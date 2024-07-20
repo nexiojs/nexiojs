@@ -4,7 +4,7 @@ import {
   type ApplicationOptions,
 } from "@nexiojs/common";
 import { Application } from "./core/application";
-import { resolveDI } from "./dependency-injection";
+import { getContainer } from "./dependency-injection/service";
 
 export const createApplication = (options: ApplicationOptions) => {
   let Adapter = options.adapter;
@@ -19,8 +19,8 @@ export const createApplication = (options: ApplicationOptions) => {
 
   const application = new Application().init();
 
-  const interceptors = (options.interceptors ?? []).map(
-    (e) => new e(...resolveDI(e))
+  const interceptors = (options.interceptors ?? []).map((Interceptor) =>
+    getContainer().get(Interceptor)
   );
 
   return (Adapter as BaseAdapter).createServer({

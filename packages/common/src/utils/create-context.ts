@@ -8,7 +8,7 @@ export const createContext = async (
   options: IAdapterOptions,
   request: Request
 ) => {
-  let { pathname, search } = new URL(request.url);
+  let { pathname, search, searchParams } = new URL(request.url);
   if (pathname.charAt(pathname.length - 1) !== "/") {
     pathname = `${pathname}/`;
   }
@@ -26,6 +26,7 @@ export const createContext = async (
       headers: request.headers,
       search,
       method: request.method.toUpperCase(),
+      searchParams,
     },
     event,
     res: {

@@ -62,7 +62,7 @@ export class ApolloGraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
         // @ts-ignore
         headers: ctx.req.headers,
         method: ctx.req.method,
-        search: "",
+        search: ctx.req.search ?? "",
       },
       context: async () => ctx,
     });
