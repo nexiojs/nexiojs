@@ -29,6 +29,7 @@ const commitlintConfig: UserConfig = {
         "revert",
         "style",
         "test",
+        "release",
       ],
     ],
     "scope-enum": [
