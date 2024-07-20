@@ -24,17 +24,6 @@ export const Headers = (name: string): ParameterDecorator => {
       kind: DecoratorKind.Headers,
     }
   );
-  // return (target: any, propertyKey, index) => {
-  //   const headers =
-  //     Reflect.getMetadata(HEADERS_METADATA, target[propertyKey as string]) ??
-  //     [];
-
-  //   Reflect.defineMetadata(
-  //     HEADERS_METADATA,
-  //     [...headers, { key: name, index }],
-  //     target[propertyKey as string]
-  //   );
-  // };
 };
 
 export const Body = (): ParameterDecorator => {
@@ -46,13 +35,6 @@ export const Body = (): ParameterDecorator => {
       kind: DecoratorKind.Body,
     }
   );
-  // return (target: any, propertyKey, index) => {
-  //   Reflect.defineMetadata(
-  //     BODY_METADATA,
-  //     { key: propertyKey, index },
-  //     target[propertyKey as string]
-  //   );
-  // };
 };
 
 export const Header = (name: string, value: string): MethodDecorator => {
@@ -66,6 +48,17 @@ export const Header = (name: string, value: string): MethodDecorator => {
       descriptor.value as any
     );
   };
+};
+
+export const SearchParams = (key?: string): ParameterDecorator => {
+  return createParamDecorator(
+    (ctx) => {
+      return key ? ctx.req.searchParams?.get(key) : ctx.req.searchParams;
+    },
+    {
+      kind: DecoratorKind.SearchParams,
+    }
+  );
 };
 
 export const Get = createMappingDecorator("GET");

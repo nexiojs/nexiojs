@@ -3,6 +3,7 @@ export enum DecoratorKind {
   Headers = 2,
   Params = 3,
   Context = 4,
+  SearchParams = 5,
 
   Args = 100,
   Query = 101,

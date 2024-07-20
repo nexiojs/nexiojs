@@ -1,16 +1,23 @@
-import { DEPENDENCY_INJECTION_METADATA } from "@nexiojs/common";
-import { getContainer } from "./container";
+// import { DEPENDENCY_INJECTION_METADATA } from "@nexiojs/common";
+// import { getContainer } from "./container";
 
-export const resolveDI = (Instance: any) => {
-  const di: any[] =
-    Reflect.getMetadata(DEPENDENCY_INJECTION_METADATA, Instance) ?? [];
+import type { Constructor } from "@nexiojs/common";
+import { getContainer } from "./service";
 
-  const constructorValues: any[] = new Array(di.length);
-  di.forEach(({ index, symbol }) => {
-    const service = getContainer().resolve(symbol);
+// export const resolveDI = (Instance: any) => {
+//   const di: any[] =
+//     Reflect.getMetadata(DEPENDENCY_INJECTION_METADATA, Instance) ?? [];
 
-    constructorValues[index] = service;
-  });
+//   const constructorValues: any[] = new Array(di.length);
+//   di.forEach(({ index, symbol }) => {
+//     const service = getContainer().resolve(symbol);
 
-  return constructorValues;
+//     constructorValues[index] = service;
+//   });
+
+//   return constructorValues;
+// };
+
+export const resolveDI = <T = any>(Instance: Constructor<T>) => {
+  return getContainer().get(Instance);
 };

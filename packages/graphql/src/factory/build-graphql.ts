@@ -27,7 +27,6 @@ import {
   RESOLVE_FIELD_METADATA,
   RESOLVE_REFERENCE_METADATA,
   UNION_TYPE_METADATA,
-  resolveParams,
   type Constructor,
   type IContext,
 } from "@nexiojs/common";
@@ -98,9 +97,7 @@ const getResolveFunction = (instance: any, method: string) => {
       info,
     };
 
-    return ctx.application.lifecycle(ctx, () =>
-      resolveParams(fn, ctx, instance)
-    );
+    return ctx.application.lifecycle(ctx, fn, instance);
   };
 };
 
@@ -121,9 +118,7 @@ const getResolveReferenceFunction = (instance: any, method: string) => {
       reference,
     };
 
-    return ctx.application.lifecycle(ctx, () =>
-      resolveParams(fn, ctx, instance)
-    );
+    return ctx.application.lifecycle(ctx, fn, instance);
   };
 };
 
@@ -312,7 +307,7 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
     const resolvers = Reflect.getMetadata(RESOLVER_METADATA, global) ?? [];
 
     for (const { resolver, parent } of resolvers) {
-      const instance = new resolver(...resolveDI(resolver));
+      const instance = resolveDI(resolver);
       resolvedResolvers[resolver.name] = instance;
       const prototype = Object.getPrototypeOf(instance);
 

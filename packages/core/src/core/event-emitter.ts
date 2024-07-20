@@ -7,6 +7,7 @@ import type {
   IInterceptor,
 } from "@nexiojs/common";
 import {
+  CALL_METADATA,
   IEventEmitter,
   INTERCEPTOR_METADATA,
   RABBIT_AUTH_GUARD,
@@ -14,6 +15,7 @@ import {
   RABBIT_INTERCEPTOR,
   resolveParams,
 } from "@nexiojs/common";
+import isNil from "lodash.isnil";
 import { match } from "path-to-regexp";
 import { HttpExeception, resolveDI } from "..";
 import {
@@ -25,9 +27,11 @@ import {
   PRE_INTERCEPTOR_EVENT,
 } from "../constants/event.constant";
 import { Context } from "../decorators/context.decorator";
+import { getContainer } from "../dependency-injection/service";
 import { NotFoundError } from "../errors/not-found.error";
+import type { CallOptions } from "src/types/call.type";
 
-export class RabbitEventEmitter extends IEventEmitter<IContext> {
+export class NexioEventEmitter extends IEventEmitter<IContext> {
   private guards: Record<string, Constructor<IAuthGuard>[]> = {};
   private refs: Record<string, Constructor> = {};
 
@@ -74,7 +78,9 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
 
     if (guards.length > 0) {
       const res = await Promise.all(
-        guards.map((guard) => new guard(...resolveDI(guard)).canActive(ctx))
+        guards.map((Guard: Constructor) =>
+          getContainer().get(Guard).canActive(ctx)
+        )
       );
 
       if (res.some((val) => val == false)) {
@@ -126,7 +132,7 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
       [];
 
     ctx._interceptors = interceptors.map((Interceptor) => {
-      return new Interceptor(...resolveDI(Interceptor));
+      return getContainer().get(Interceptor);
     });
 
     await Promise.chain(
@@ -142,7 +148,7 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
     );
   }
 
-  async lifecycle(ctx: IContext, fn: Function) {
+  async lifecycle(ctx: IContext, fn: Function, instance: Constructor) {
     {
       await this.emitInternal(PRE_INTERCEPTOR_EVENT, ctx);
     }
@@ -155,8 +161,21 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
       }
     }
 
-    const res = await fn();
+    const res = await resolveParams(fn, ctx, instance).catch((e: Error) => e);
     ctx.res.body = res;
+
+    {
+      const rpc = Reflect.getMetadata(CALL_METADATA, fn) ?? [];
+      await Promise.chain(
+        rpc.map(({ when, instance, method }: CallOptions) => {
+          if (when(res)) {
+            const Instance = resolveDI(instance);
+
+            return resolveParams(Instance[method], ctx, Instance);
+          }
+        })
+      );
+    }
 
     await this.emitInternal(POST_INTERCEPTOR_EVENT, ctx);
 
@@ -171,12 +190,10 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
     // Check exact path
     let res: unknown;
     if (fn) {
-      res = await this.lifecycle(ctx, () =>
-        resolveParams(fn, ctx, this.refs[event] ?? this)
-      );
+      res = await this.lifecycle(ctx, fn, this.refs[event] ?? this);
     }
 
-    if (!res) {
+    if (isNil(res)) {
       for (const key of Object.keys(this.events)) {
         const fn = match(key, { decode: decodeURIComponent });
         const pathMatch = fn(event as string);
@@ -187,9 +204,7 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
           const [fn] = this.events[key] ?? [];
 
           if (fn) {
-            res = await this.lifecycle(ctx, () =>
-              resolveParams(fn, ctx, this.refs[event] ?? this)
-            );
+            res = await this.lifecycle(ctx, fn, this.refs[event] ?? this);
             break;
           }
         }
@@ -198,7 +213,11 @@ export class RabbitEventEmitter extends IEventEmitter<IContext> {
 
     await this.emitInternal(GLOBAL_POST_INTERCEPTOR_EVENT, ctx);
 
-    if (!res) throw new NotFoundError();
+    if (isNil(res)) throw new NotFoundError();
+
+    if (res instanceof Error) {
+      throw res;
+    }
 
     return res;
   }
