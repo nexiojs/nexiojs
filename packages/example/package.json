@@ -1,0 +1,41 @@
+{
+  "name": "@nexiojs/example",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "@apollo/gateway": "^2.8.3",
+    "@faker-js/faker": "^8.4.1",
+    "@nexiojs/bun-adapter": "workspace:*",
+    "@nexiojs/common": "workspace:*",
+    "@nexiojs/core": "workspace:*",
+    "@nexiojs/graphql": "workspace:*",
+    "@nexiojs/node-adapter": "workspace:*",
+    "drizzle-orm": "^0.32.0",
+    "graphql": "^16.9.0",
+    "jose": "^5.6.3",
+    "pg": "^8.12.0"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build:user": "bun build packages/user-application/main.ts --target node --outfile dist/user.js",
+    "build:post": "bun build packages/post-application/main.ts --target node --outfile dist/post.js",
+    "build:gateway": "bun build packages/gateway/main.ts --target node --outfile dist/gateway.js",
+    "build:subgraph": "pnpm build:user && pnpm build:post",
+    "build:graphql": "pnpm build:subgraph && pnpm build:gateway",
+    "start:subgraph": "concurrently \"node dist/user.js\" \"node dist/post.js\"",
+    "start:gateway": "node dist/gateway.js",
+    "build:http": "bun build packages/http/node.ts --target node --outfile dist/http-node.js",
+    "dev:bun": "bun --hot run packages/http/bun.ts",
+    "dev:node": "nodemon dist/http-node.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/pg": "^8.11.6",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.4"
+  }
+}
