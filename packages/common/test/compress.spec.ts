@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { compress } from "../../src/compress";
-import { IContext } from "../../src/interfaces";
+import { compress } from "../src/compress";
+import { IContext } from "../src/interfaces";
 
 describe("compress", () => {
   it("should compress the response body with gzip encoding", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { bodyParser } from "../../src/body-parser";
+import { bodyParser } from "../src/body-parser";
 
 describe("bodyParser", () => {
   it("should parse JSON request body", async () => {
