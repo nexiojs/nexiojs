@@ -26,6 +26,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm --filter "*common" test
+        run: pnpm --filter "*common" install
       - name: Run tests
         run: pnpm --filter "*common" test
