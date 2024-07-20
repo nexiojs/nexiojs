@@ -1,10 +1,9 @@
-import { GraphQLInt, GraphQLString, graphql, printSchema } from "graphql";
+import { describe, expect, it } from "bun:test";
+import { GraphQLInt, GraphQLString, graphql } from "graphql";
 import { ObjectType, buildGraphQLSchema } from "../src";
-import { describe, it, expect } from "bun:test";
-import { Resolver } from "../src/decorators/resolver";
 import { Query } from "../src/decorators";
 import { Field } from "../src/decorators/field";
-import { Inject, register } from "@nexiojs/core";
+import { Resolver } from "../src/decorators/resolver";
 
 @ObjectType()
 export class Person {
@@ -21,13 +20,9 @@ class PersonService {
   }
 }
 
-register(PersonService, (ctx) => new PersonService());
-
 @Resolver()
 export class PersonResolver {
-  constructor(
-    @Inject(PersonService) private readonly personService: PersonService
-  ) {}
+  constructor(private readonly personService: PersonService) {}
 
   @Query(() => Person)
   hello() {

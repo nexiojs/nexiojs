@@ -11,6 +11,8 @@ export const MIDDLEWARE_METADATA = Symbol("__MIDDLEWARE__");
 export const INTERCEPTOR_METADATA = Symbol("__INTERCEPTOR__");
 export const BODY_METADATA = Symbol("__BODY__");
 export const CUSTOM_METADATA = Symbol("__CUSTOM_METADATA__");
+export const INJECTABLE_METADATA = Symbol("__INJECTABLE__");
+export const CALL_METADATA = Symbol("__CALL__");
 
 // GraphQL
 export const OBJECT_TYPE_METADATA = Symbol("__OBJECT_TYPE__");

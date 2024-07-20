@@ -12,9 +12,10 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "path-to-regexp": "^7.0.0",
-    "reflect-metadata": "^0.2.2",
-    "@nexiojs/common": "workspace:*"
+    "@nexiojs/common": "workspace:*",
+    "@types/lodash.isnil": "^4.0.9",
+    "lodash.isnil": "^4.0.0",
+    "path-to-regexp": "^7.0.0"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
