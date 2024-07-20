@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./node_modules/.bin/commitlint -g .commitlintrc.ts --edit
