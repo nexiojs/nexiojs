@@ -34,7 +34,7 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@master
-        if: startsWith(github.event.head_commit.message, 'version')
+        if: startsWith(github.event.head_commit.message, 'release')
         with:
           publish: pnpm release
           commit: "chore: version packages"
