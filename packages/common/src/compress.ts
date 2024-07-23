@@ -1,4 +1,4 @@
-import type { IContext } from "./interfaces/context.interface";
+import type { IContext } from "./interfaces/context.interface.ts";
 
 const ENCODING_TYPES = ["gzip", "deflate"] as const;
 

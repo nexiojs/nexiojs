@@ -9,7 +9,7 @@ export type CreateUnionTypeConfig = Omit<
 };
 
 export const createUnionType = (config: CreateUnionTypeConfig) => {
-  const types = Reflect.getMetadata(UNION_TYPE_METADATA, global) ?? [];
+  const types = Reflect.getMetadata(UNION_TYPE_METADATA, globalThis) ?? [];
 
-  Reflect.defineMetadata(UNION_TYPE_METADATA, [...types, config], global);
+  Reflect.defineMetadata(UNION_TYPE_METADATA, [...types, config], globalThis);
 };

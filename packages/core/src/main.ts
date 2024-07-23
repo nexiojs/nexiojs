@@ -2,11 +2,15 @@ import {
   Adapter as BaseAdapter,
   Kind,
   type ApplicationOptions,
+  type IApplication,
+  type IContext,
 } from "@nexiojs/common";
-import { Application } from "./core/application";
-import { getContainer } from "./dependency-injection/service";
+import { Application } from "./core/application.ts";
+import { getContainer } from "./dependency-injection/service.ts";
 
-export const createApplication = (options: ApplicationOptions) => {
+export const createApplication = (
+  options: ApplicationOptions
+): IApplication<IContext> => {
   let Adapter = options.adapter;
 
   // @ts-ignore
@@ -23,9 +27,11 @@ export const createApplication = (options: ApplicationOptions) => {
     getContainer().get(Interceptor)
   );
 
-  return (Adapter as BaseAdapter).createServer({
+  (Adapter as BaseAdapter).createServer({
     ...options,
     application,
     interceptors,
   });
+
+  return application;
 };

@@ -13,7 +13,8 @@
     "@apollo/gateway": "^2.8.3",
     "@apollo/server": "^4.10.4",
     "@apollo/subgraph": "^2.8.3",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "reflect-metadata": "^0.2.2"
   },
   "dependencies": {
     "@graphql-tools/merge": "^9.0.4",
@@ -22,8 +23,7 @@
     "@nexiojs/common": "workspace:*",
     "@nexiojs/core": "workspace:*",
     "graphql-tag": "^2.12.6",
-    "lodash.merge": "^4.6.2",
-    "reflect-metadata": "^0.2.2"
+    "lodash.merge": "^4.6.2"
   },
   "scripts": {
     "prebuild": "rimraf dist",

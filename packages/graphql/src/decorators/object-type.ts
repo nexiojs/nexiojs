@@ -6,12 +6,12 @@ type Options = {
 
 export const ObjectType = (options?: Options): ClassDecorator => {
   return (target) => {
-    const types = Reflect.getMetadata(OBJECT_TYPE_METADATA, global) ?? [];
+    const types = Reflect.getMetadata(OBJECT_TYPE_METADATA, globalThis) ?? [];
 
     Reflect.defineMetadata(
       OBJECT_TYPE_METADATA,
       [...types, { target, options }],
-      global
+      globalThis
     );
   };
 };

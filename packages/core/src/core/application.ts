@@ -17,7 +17,7 @@ import { getContainer } from "../dependency-injection/service.ts";
 import { pathToEvent } from "../utils/path-to-event.ts";
 import { NexioEventEmitter } from "./event-emitter.ts";
 
-export class Application implements IApplication<any> {
+export class Application implements IApplication<IContext> {
   private eventEmitter = new NexioEventEmitter();
 
   constructor() {}
@@ -25,7 +25,7 @@ export class Application implements IApplication<any> {
   init() {
     try {
       const controllers: Constructor[] =
-        Reflect.getMetadata(CONTROLLER_METADATA, global) ?? [];
+        Reflect.getMetadata(CONTROLLER_METADATA, globalThis) ?? [];
 
       controllers.forEach((Controller) => {
         const instance = getContainer().get(Controller);

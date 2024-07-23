@@ -4,7 +4,7 @@ import {
   METHOD_METADATA,
   PATH_METADATA,
 } from "@nexiojs/common";
-import { createParamDecorator } from ".";
+import { createParamDecorator } from "./create-param-metadata.decorator.ts";
 
 const createMappingDecorator =
   (method: string) =>

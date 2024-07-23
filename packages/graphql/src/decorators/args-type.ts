@@ -6,8 +6,8 @@ export const ArgsType = (): ClassDecorator => {
 
     Reflect.defineMetadata(
       ARGS_TYPE_METADATA,
-      [...(Reflect.getMetadata(ARGS_TYPE_METADATA, global) ?? []), target],
-      global
+      [...(Reflect.getMetadata(ARGS_TYPE_METADATA, globalThis) ?? []), target],
+      globalThis
     );
   };
 };

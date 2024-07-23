@@ -12,7 +12,7 @@ type Options = {
 export const InterfaceType = (options?: Options): ClassDecorator => {
   return (target) => {
     const interfaces =
-      Reflect.getMetadata(INTERFACE_TYPE_METADATA, global) ?? [];
+      Reflect.getMetadata(INTERFACE_TYPE_METADATA, globalThis) ?? [];
 
     Reflect.defineMetadata(
       DECORATOR_KIND_METADATA,
@@ -23,7 +23,7 @@ export const InterfaceType = (options?: Options): ClassDecorator => {
     Reflect.defineMetadata(
       INTERFACE_TYPE_METADATA,
       [...interfaces, { target, options }],
-      global
+      globalThis
     );
   };
 };

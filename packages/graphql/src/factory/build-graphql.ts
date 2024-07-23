@@ -5,6 +5,7 @@ import {
   getResolversFromSchema,
   printSchemaWithDirectives,
 } from "@graphql-tools/utils";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import {
   AUTH_GUARD_METADATA,
   CUSTOM_METADATA,
@@ -52,8 +53,9 @@ import {
 } from "graphql";
 import gql from "graphql-tag";
 import merge from "lodash.merge";
-import type { ApolloSubGraphOptions, CreateUnionTypeConfig } from "..";
-import { resolveDirective } from "../utils/resolve-directive";
+import type { ApolloSubGraphOptions } from "../apollo.ts";
+import type { CreateUnionTypeConfig } from "../utils/create-union-type.ts";
+import { resolveDirective } from "../utils/resolve-directive.ts";
 
 const isGraphQLDecorator = (type: DecoratorKind) => {
   return type === DecoratorKind.Args;
@@ -251,12 +253,13 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
 
   // Enum
   {
-    const enums = Reflect.getMetadata(ENUM_TYPE_METADATA, global) ?? {};
+    const enums = Reflect.getMetadata(ENUM_TYPE_METADATA, globalThis) ?? {};
     merge(map, enums);
   }
 
   {
-    const types = Reflect.getMetadata(INTERFACE_TYPE_METADATA, global) ?? [];
+    const types =
+      Reflect.getMetadata(INTERFACE_TYPE_METADATA, globalThis) ?? [];
 
     for (const { target, options } of types) {
       const _interface = new GraphQLInterfaceType({
@@ -271,7 +274,8 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
   }
 
   {
-    const objectTypes = Reflect.getMetadata(OBJECT_TYPE_METADATA, global) ?? [];
+    const objectTypes =
+      Reflect.getMetadata(OBJECT_TYPE_METADATA, globalThis) ?? [];
     for (const { target, options } of objectTypes) {
       const fields = {};
       let interfaces = options?.interfaces?.();
@@ -304,7 +308,7 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
 
   // Resolvers
   {
-    const resolvers = Reflect.getMetadata(RESOLVER_METADATA, global) ?? [];
+    const resolvers = Reflect.getMetadata(RESOLVER_METADATA, globalThis) ?? [];
 
     for (const { resolver, parent } of resolvers) {
       const instance = resolveDI(resolver);
@@ -405,7 +409,7 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
   // Union Type
   {
     const unionTypes: CreateUnionTypeConfig[] =
-      Reflect.getMetadata(UNION_TYPE_METADATA, global) ?? [];
+      Reflect.getMetadata(UNION_TYPE_METADATA, globalThis) ?? [];
 
     schema = addTypes(
       schema,
@@ -437,7 +441,7 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
   }
 
   {
-    const metadata = Reflect.getMetadata(RESOLVER_METADATA, global) ?? [];
+    const metadata = Reflect.getMetadata(RESOLVER_METADATA, globalThis) ?? [];
     for (const { resolver } of metadata) {
       const references =
         Reflect.getMetadata(RESOLVE_REFERENCE_METADATA, resolver) ?? [];
@@ -464,5 +468,10 @@ export const buildGraphQLSchema = (options?: ApolloSubGraphOptions) => {
         `,
         resolvers: resolvers as unknown as any,
       })
-    : schema;
+    : makeExecutableSchema({
+        typeDefs: gql`
+          ${typeDefs}
+        `,
+        resolvers: resolvers as unknown as any,
+      });
 };
