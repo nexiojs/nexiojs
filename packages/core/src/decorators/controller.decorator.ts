@@ -6,8 +6,8 @@ export const Controller = (path: string): ClassDecorator => {
 
     Reflect.defineMetadata(
       CONTROLLER_METADATA,
-      [...(Reflect.getMetadata(CONTROLLER_METADATA, global) ?? []), target],
-      global
+      [...(Reflect.getMetadata(CONTROLLER_METADATA, globalThis) ?? []), target],
+      globalThis
     );
   };
 };

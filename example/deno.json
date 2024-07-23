@@ -1,0 +1,21 @@
+{
+  "imports": {
+    "@nexiojs/core": "../packages/core/src/index.ts",
+    "@nexiojs/bun-adapter": "../packages/bun-adapter/src/index.ts",
+    "@nexiojs/common": "../packages/common/src/index.ts",
+    "@nexiojs/node-adapter": "../packages/node-adapter/src/index.ts",
+    "@nexiojs/microservice": "../packages/microservice/src/index.ts",
+    "@nexiojs/graphql": "../packages/graphql/src/index.ts",
+    "reflect-metadata": "npm:reflect-metadata",
+    "lodash.merge": "npm:lodash.merge",
+    "grpc-reflection-js": "npm:grpc-reflection-js",
+    "path-to-regexp": "npm:path-to-regexp",
+    "lodash.isnil": "npm:lodash.isnil",
+    "@grpc/grpc-js": "npm:@grpc/grpc-js",
+    "@grpc/proto-loader": "npm:@grpc/proto-loader"
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "lib": ["dom", "esnext"]
+  }
+}

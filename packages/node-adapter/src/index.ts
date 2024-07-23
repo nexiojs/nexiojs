@@ -79,7 +79,7 @@ const createRequest = async (r: IncomingMessage, host: string) => {
 
 export class NodeAdapter extends Adapter {
   createServer(options: IAdapterOptions): void {
-    const { application, hostname, port, ...rest } = options;
+    const { application, hostname, port = 3000, ...rest } = options;
 
     createServer(async (req, res) => {
       const host = req.headers.host ?? hostname;

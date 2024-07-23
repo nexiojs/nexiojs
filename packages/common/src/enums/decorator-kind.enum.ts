@@ -15,4 +15,9 @@ export enum DecoratorKind {
 
   ResolveReference = 151,
   Reference = 152,
+
+  MicroserviceClient = 200,
+
+  Metadata = 250,
+  GrpcInput = 251,
 }

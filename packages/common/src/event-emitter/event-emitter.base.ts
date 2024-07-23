@@ -1,4 +1,4 @@
-import type { Listener } from "../interfaces";
+import type { Listener } from "../interfaces/index.ts";
 
 export abstract class IEventEmitter<T = any> {
   protected events: Record<string, Listener<T>[]> = {};

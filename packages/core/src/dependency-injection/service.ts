@@ -1,7 +1,8 @@
 import "reflect-metadata";
+import "../polyfills/promise.ts";
 
 import { INJECTABLE_METADATA, type Constructor } from "@nexiojs/common";
-import type { InjectableOptions } from "src/types/injectable.type";
+import type { InjectableOptions } from "../types/injectable.type.ts";
 
 class Container {
   private instances: Map<any, any> = new Map();
@@ -18,6 +19,7 @@ class Container {
       const instance = this.createInstance(cls);
       this.instances.set(cls, instance);
     }
+
     return this.instances.get(cls);
   }
 
@@ -31,7 +33,30 @@ class Container {
       return Instance;
     });
 
-    return new cls(...dependencies);
+    const Instance = new cls(...dependencies) as any;
+    // Object.getOwnPropertyNames(cls.prototype).forEach((val) => {
+    //   if (!IsConstructor(val) && IsFunction(cls.prototype[val])) {
+    //     Instance[val] = new Proxy(Instance[val], {
+    //       apply: async (target, thisArg, argArray) => {
+    //         const result = await Reflect.apply(target, thisArg, argArray);
+    //         const rpc = Reflect.getMetadata(CALL_METADATA, target) ?? [];
+
+    //         await Promise.chain(
+    //           rpc?.map(({ when, instance, method }: CallOptions) => {
+    //             if (when(result)) {
+    //               const Instance = this.get(instance);
+    //               return resolveParams(Instance[method], {}, Instance);
+    //             }
+    //           })
+    //         );
+
+    //         return result;
+    //       },
+    //     });
+    //   }
+    // });
+
+    return Instance;
   }
 }
 

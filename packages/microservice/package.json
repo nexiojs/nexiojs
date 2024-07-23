@@ -1,0 +1,56 @@
+{
+  "name": "@nexiojs/microservice",
+  "version": "0.0.4",
+  "description": "",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsup --config ../../config.ts",
+    "test": "bun test --preload ./test/setup.ts"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typings": "dist/index.d.ts",
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "devDependencies": {
+    "@grpc/grpc-js": "^1.11.1",
+    "@grpc/proto-loader": "^0.7.13",
+    "@grpc/reflection": "^1.0.4",
+    "@nexiojs/common": "workspace:*",
+    "@nexiojs/core": "workspace:*",
+    "grpc-reflection-js": "^0.3.0"
+  },
+  "peerDependencies": {
+    "@grpc/grpc-js": "^1.11.1",
+    "@grpc/proto-loader": "^0.7.13",
+    "@grpc/reflection": "^1.0.4",
+    "@nexiojs/common": "workspace:*",
+    "@nexiojs/core": "workspace:*",
+    "grpc-reflection-js": "^0.3.0",
+    "zod": "^3.23.8"
+  },
+  "dependencies": {
+    "protobufjs": "^7.3.2"
+  }
+}

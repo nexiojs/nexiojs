@@ -91,7 +91,7 @@ export class ApolloGraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
 
     adapter.createServer({
       ...options,
-      makeContext: async (ctx) => {
+      makeContext: async (ctx: IContext) => {
         ctx[GRAPHQL] = {
           apollo: this.apollo,
         };

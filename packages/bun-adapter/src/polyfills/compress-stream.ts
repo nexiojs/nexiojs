@@ -5,7 +5,7 @@ import {
   createGzip,
   createInflate,
   createInflateRaw,
-} from "zlib";
+} from "node:zlib";
 
 declare module globalThis {
   var CompressionStream: any;
