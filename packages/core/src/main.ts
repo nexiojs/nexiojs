@@ -8,18 +8,18 @@ import {
 import { Application } from "./core/application.ts";
 import { getContainer } from "./dependency-injection/service.ts";
 
-export const createApplication = (
+export const createApplication = async <T = IApplication<IContext>>(
   options: ApplicationOptions
-): IApplication<IContext> => {
-  let Adapter = options.adapter;
+): Promise<T> => {
+  const Adapter = options.adapter;
 
   // @ts-ignore
-  if (options.adapter.kind !== Kind.Http) {
-    Adapter = options.adapter;
-  } else {
-    // @ts-ignore
-    Adapter = new options.adapter();
-  }
+  // if (options.adapter.kind !== Kind.Http) {
+  //   Adapter = options.adapter;
+  // } else {
+  //   // @ts-ignore
+  //   Adapter = new options.adapter();
+  // }
 
   const application = new Application().init();
 
@@ -27,11 +27,11 @@ export const createApplication = (
     getContainer().get(Interceptor)
   );
 
-  (Adapter as BaseAdapter).createServer({
+  await Adapter.createServer({
     ...options,
     application,
     interceptors,
   });
 
-  return application;
+  return application as T;
 };

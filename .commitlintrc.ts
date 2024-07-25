@@ -35,7 +35,16 @@ const commitlintConfig: UserConfig = {
     "scope-enum": [
       1,
       "always",
-      ["bun", "node", "common", "core", "graphql", "apollo", "microservice"],
+      [
+        "bun",
+        "node",
+        "common",
+        "core",
+        "graphql",
+        "apollo",
+        "microservice",
+        "deno",
+      ],
     ],
   },
 };

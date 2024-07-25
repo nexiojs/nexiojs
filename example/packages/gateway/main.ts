@@ -24,12 +24,16 @@ export class CORSInterceptor {
   post(ctx: IContext): void | Promise<void> {}
 }
 
-createApplication({
-  adapter: new ApolloGraphQLAdapter({
-    gateway,
-    adapter: NodeAdapter,
-  }),
-  compress: true,
-  interceptors: [CORSInterceptor],
-  port: 3000,
-});
+const main = async () => {
+  await createApplication({
+    adapter: new ApolloGraphQLAdapter({
+      gateway,
+      adapter: new NodeAdapter(),
+    }),
+    compress: true,
+    interceptors: [CORSInterceptor],
+    port: 3000,
+  });
+};
+
+main();

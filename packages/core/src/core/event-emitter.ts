@@ -151,21 +151,24 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
       }
     }
 
-    const res = await resolveParams(fn, ctx, instance).catch((e: Error) => e);
+    const proxyFn = new Proxy(fn, {
+      apply: async (target, thisArg, argArray) => {
+        argArray.push(ctx);
+        const result = await Reflect.apply(target, thisArg, argArray);
+
+        return result;
+      },
+    });
+    const keys = Reflect.getMetadataKeys(fn);
+    keys.forEach((key) => {
+      const metadata = Reflect.getMetadata(key, fn);
+      Reflect.defineMetadata(key, metadata, proxyFn);
+    });
+
+    const res = await resolveParams(proxyFn, ctx, instance).catch(
+      (e: Error) => e
+    );
     ctx.res.body = res;
-
-    // {
-    //   const rpc = Reflect.getMetadata(CALL_METADATA, fn) ?? [];
-    //   await Promise.chain(
-    //     rpc.map(({ when, instance, method }: CallOptions) => {
-    //       if (when(res)) {
-    //         const Instance = resolveDI(instance);
-
-    //         return resolveParams(Instance[method], ctx, Instance);
-    //       }
-    //     })
-    //   );
-    // }
 
     await this.emitInternal(POST_INTERCEPTOR_EVENT, ctx);
 

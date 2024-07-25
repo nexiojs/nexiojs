@@ -67,7 +67,6 @@ export class GrpcTransporter extends ITransporter {
 
           handlers[methodName] = async (input: any, callback: any) => {
             try {
-              console.log(input.request);
               if (validator) {
                 const { error } = await validator.safeParseAsync(input.request);
 

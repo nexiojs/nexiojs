@@ -13,13 +13,14 @@ export class AuthController {
 
   @Post("/")
   async login(@Body() body: Credentials, @Headers("host") host: string) {
-    console.log(body);
-    return this.authService.login(body.username, body.password);
+    const res = await this.authService.login(body.username, body.password);
+
+    return res;
   }
 
   @Post("/register")
-  @Call(AuthService, "rollback", (e: any) => e instanceof Error)
-  async register() {
+  @Call(AuthService, "rollback", (e: any) => true)
+  async register(@Body() body: any) {
     throw new HttpExeception("Dummy", 400);
   }
 }

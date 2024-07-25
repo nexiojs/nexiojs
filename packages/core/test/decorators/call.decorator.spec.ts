@@ -5,7 +5,7 @@ import { Context } from "../../src/decorators/context.decorator.ts";
 import { Injectable } from "../../src/decorators/injectable.decorator.ts";
 import { resolveDI } from "../../src/dependency-injection/resolve.ts";
 
-describe.skip("Call Decorator", () => {
+describe("Call Decorator", () => {
   const result = "Intercepted Result";
   const when = jest.fn((res) => true);
   const fn = jest.fn(() => true);
@@ -36,7 +36,7 @@ describe.skip("Call Decorator", () => {
 
   const controller = resolveDI(Controller);
 
-  it.skip("should enrich metatype with CALL metadata", () => {
+  it("should enrich metatype with CALL metadata", () => {
     const [rpc] = Reflect.getMetadata(CALL_METADATA, controller.fn);
 
     expect(rpc).toEqual({

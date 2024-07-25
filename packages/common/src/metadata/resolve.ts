@@ -21,7 +21,7 @@ export const resolveParams = async (listener: any, ctx: any, ref?: any) => {
   }
 
   let fn = listener;
-  if (ref) {
+  if (ref && listener.bind) {
     fn = listener.bind(ref);
   }
 

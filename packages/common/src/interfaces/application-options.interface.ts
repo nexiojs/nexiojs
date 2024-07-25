@@ -6,7 +6,7 @@ export interface ApplicationOptions {
   port?: number; // default 3000
 
   compress?: boolean;
-  adapter: Constructor<Adapter> | Adapter;
+  adapter: Adapter;
   interceptors?: Constructor<IInterceptor>[];
   hostname?: string;
 }

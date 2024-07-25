@@ -7,6 +7,7 @@ import {
 import { User } from "./models/user";
 import { GraphQLString } from "graphql";
 import { Reference } from "@nexiojs/graphql";
+import { faker } from "@faker-js/faker";
 
 @Resolver(() => User)
 export class UserResolver {
@@ -19,11 +20,11 @@ export class UserResolver {
   resolveReference(
     @Reference() reference: { __typename: string; id: number }
   ): User {
-    return { id: reference.id, name: "ZZZ" };
+    return { id: reference.id, name: faker.person.fullName() };
   }
 
   @ResolveField(() => GraphQLString)
   background() {
-    return "Hello World";
+    return faker.person.bio();
   }
 }

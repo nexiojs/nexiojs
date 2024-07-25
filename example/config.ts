@@ -7,7 +7,7 @@ export default defineConfig({
     "./packages/http/bun.ts",
     "./packages/gateway/main.ts",
     "./packages/post-application/main.ts",
-    "./packages/post-application/user.ts",
+    "./packages/user-application/main.ts",
   ],
   format: ["esm", "cjs"],
   platform: "node",

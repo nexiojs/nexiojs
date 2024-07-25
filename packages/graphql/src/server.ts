@@ -5,7 +5,6 @@ import {
   GRAPHQL,
   Kind,
   type ApplicationOptions,
-  type Constructor,
   type IApplication,
   type IContext,
   type IInterceptor,
@@ -17,14 +16,14 @@ import { buildGraphQLSchema } from "./factory/build-graphql.ts";
 export type IGraphQLAdapterOptions = {
   application: IApplication<IContext>;
   interceptors: IInterceptor[];
-  adapter: Constructor<Adapter>;
+  adapter: Adapter;
 } & Omit<ApplicationOptions, "adapter" | "interceptors">;
 
 export class GraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
   kind: Kind = Kind.GraphQL;
   schema: GraphQLSchema;
 
-  constructor(private readonly adapter: Constructor<Adapter>) {
+  constructor(private readonly adapter: Adapter) {
     super();
 
     this.schema = buildGraphQLSchema();
@@ -40,7 +39,7 @@ export class GraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
     return res;
   }
 
-  createServer(options: IGraphQLAdapterOptions): void {
+  async createServer(options: IGraphQLAdapterOptions) {
     const event = pathToEvent("/graphql", "POST");
     const opts = pathToEvent("/graphql", "OPTIONS");
 
@@ -49,9 +48,7 @@ export class GraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
       options.application.setRef(path, this);
     });
 
-    const adapter = new this.adapter();
-
-    adapter.createServer({
+    await this.adapter.createServer({
       ...options,
       makeContext: async (ctx) => {
         ctx[GRAPHQL] = {

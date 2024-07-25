@@ -15,5 +15,5 @@ export abstract class Adapter<T = IAdapterOptions> {
 
   constructor() {}
 
-  abstract createServer(options: T): void;
+  abstract createServer(options: T): Promise<void>;
 }

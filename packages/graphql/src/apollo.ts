@@ -14,7 +14,7 @@ import type { IGraphQLAdapterOptions } from "./server.ts";
 export type IApolloAdapterOptions = (
   | ApolloSubGraphOptions
   | ApolloGatewayOptions
-) & { adapter: Constructor<Adapter> } & Omit<
+) & { adapter: Adapter } & Omit<
     ApolloServerOptions<any>,
     "schema" | "gateway" | "typeDefs" | "resolvers"
   >;
@@ -78,7 +78,7 @@ export class ApolloGraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
     return JSON.parse(res.body.string);
   }
 
-  createServer(options: IGraphQLAdapterOptions): void {
+  async createServer(options: IGraphQLAdapterOptions) {
     const event = pathToEvent("/graphql/", "POST");
     const opts = pathToEvent("/graphql/", "OPTIONS");
 
@@ -87,9 +87,7 @@ export class ApolloGraphQLAdapter extends Adapter<IGraphQLAdapterOptions> {
       options.application.setRef(path, this);
     });
 
-    const adapter = new this.options.adapter();
-
-    adapter.createServer({
+    await this.options.adapter.createServer({
       ...options,
       makeContext: async (ctx: IContext) => {
         ctx[GRAPHQL] = {

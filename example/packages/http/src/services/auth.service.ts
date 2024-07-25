@@ -1,4 +1,4 @@
-import { HttpExeception, Injectable } from "@nexiojs/core";
+import { Context, HttpExeception, Injectable } from "@nexiojs/core";
 import { sql } from "drizzle-orm";
 import { SignJWT, jwtVerify } from "jose";
 import { ConfigService } from "./config.service.ts";
@@ -14,9 +14,15 @@ export class AuthService {
   ) {}
 
   async login(username: string, password: string) {
-    const { rows } = await this.databaseService.db.execute(
-      sql`SELECT * FROM users WHERE username = ${username} AND password = ${password}`
-    );
+    const { rows } = await this.databaseService.db
+      .execute(
+        sql`SELECT * FROM users WHERE username = ${username} AND password = ${password}`
+      )
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
+
     if (rows.length === 0) {
       throw new HttpExeception("Invalid credentails", 403);
     }
@@ -32,7 +38,6 @@ export class AuthService {
   }
 
   async verify(token: string) {
-    console.log(token);
     const secret = new TextEncoder().encode(this.configService.get("secret"));
 
     try {
@@ -47,9 +52,7 @@ export class AuthService {
     }
   }
 
-  async rollback() {
-    console.debug("Rollback");
-
+  async rollback(@Context() ctx: any) {
     return "";
   }
 }

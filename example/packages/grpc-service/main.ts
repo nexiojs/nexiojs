@@ -10,11 +10,12 @@ import {
   Field,
   Grpc,
   GrpcMethod,
+  IMicroservice,
+  Input,
   Int64,
   Message,
   String,
   Transporter,
-  Input,
 } from "@nexiojs/microservice";
 import { join } from "node:path";
 import { z } from "zod";
@@ -64,12 +65,13 @@ class A {
 
 const main = async () => {
   class Dummy extends Adapter {
-    createServer(options: IAdapterOptions): void {}
+    async createServer(options: IAdapterOptions) {}
   }
 
-  const app = createApplication({
-    adapter: Dummy,
+  const app = await createApplication<IMicroservice>({
+    adapter: new Dummy(),
   });
+
   await app.createMicroservice({
     transpoter: Transporter.Grpc,
     options: {

@@ -2,7 +2,6 @@ import type { ServiceClientConstructor } from "@grpc/grpc-js";
 import { Client } from "grpc-reflection-js";
 import { promisify } from "node:util";
 import type { ClientOptions } from "../../types/client-options.type.ts";
-import Long from "long";
 
 export class GrpcClient {
   private clientMap: Map<String, InstanceType<ServiceClientConstructor>> =
