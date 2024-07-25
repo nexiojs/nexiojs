@@ -10,7 +10,8 @@
       "@nexiojs/graphql": ["../packages/graphql/src"],
       "@nexiojs/bun-adapter": ["../packages/bun-adapter/src"],
       "@nexiojs/node-adapter": ["../packages/node-adapter/src"],
-      "@nexiojs/microservice": ["../packages/microservice/src"]
+      "@nexiojs/microservice": ["../packages/microservice/src"],
+      "@nexiojs/deno-adapter": ["../packages/deno-adapter/src"]
     },
     "baseUrl": ".",
     "noEmit": true,

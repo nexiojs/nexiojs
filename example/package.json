@@ -21,8 +21,8 @@
     "prebuild": "rimraf dist",
     "build": "tsup --config ./config.ts",
     "build:dev": "tsup --config ./config.ts --watch",
-    "start:subgraph": "concurrently \"node dist/user.js\" \"node dist/post.js\"",
-    "start:gateway": "node dist/gateway.js",
+    "start:subgraph": "concurrently \"node dist/user-application/main.js\" \"node dist/post-application/main.js\"",
+    "start:gateway": "node dist/gateway/main.js",
     "dev:bun": "bun --hot run packages/http/bun.ts",
     "dev:node": "nodemon dist/http-node.js",
     "dev:grpc": "nodemon dist/main.js"

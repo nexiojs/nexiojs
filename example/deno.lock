@@ -18,13 +18,16 @@
       "npm:grpc-reflection-js@^0.3.0": "npm:grpc-reflection-js@0.3.0_@grpc+grpc-js@1.11.1",
       "npm:jose@^5.6.3": "npm:jose@5.6.3",
       "npm:lodash.isnil": "npm:lodash.isnil@4.0.0",
+      "npm:lodash.last": "npm:lodash.last@3.0.0",
       "npm:lodash.merge": "npm:lodash.merge@4.6.2",
+      "npm:long": "npm:long@5.2.3",
       "npm:nodemon@^3.1.4": "npm:nodemon@3.1.4",
       "npm:path-to-regexp": "npm:path-to-regexp@7.1.0",
       "npm:pg@^8.12.0": "npm:pg@8.12.0",
       "npm:reflect-metadata": "npm:reflect-metadata@0.2.2",
       "npm:ts-node@^10.9.2": "npm:ts-node@10.9.2_@types+node@18.16.19_typescript@5.5.3",
-      "npm:tsup@^8.2.2": "npm:tsup@8.2.2_esbuild@0.23.0"
+      "npm:tsup@^8.2.2": "npm:tsup@8.2.2_esbuild@0.23.0",
+      "npm:zod": "npm:zod@3.23.8"
     },
     "npm": {
       "@apollo/composition@2.8.3_graphql@16.9.0": {
@@ -1382,6 +1385,10 @@
         "integrity": "sha512-up2Mzq3545mwVnMhTDMdfoG1OurpA/s5t88JmQX809eH3C8491iu2sfKhTfhQtKY78oPNhiaHJUpT/dUDAAtng==",
         "dependencies": {}
       },
+      "lodash.last@3.0.0": {
+        "integrity": "sha512-14mq7rSkCxG4XMy9lF2FbIOqqgF0aH0NfPuQ3LPR3vIh0kHnUvIYP70dqa1Hf47zyXfQ8FzAg0MYOQeSuE1R7A==",
+        "dependencies": {}
+      },
       "lodash.merge@4.6.2": {
         "integrity": "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==",
         "dependencies": {}
@@ -2336,6 +2343,10 @@
       "yn@3.1.1": {
         "integrity": "sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==",
         "dependencies": {}
+      },
+      "zod@3.23.8": {
+        "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==",
+        "dependencies": {}
       }
     }
   },
@@ -2346,9 +2357,12 @@
       "npm:@grpc/proto-loader",
       "npm:grpc-reflection-js",
       "npm:lodash.isnil",
+      "npm:lodash.last",
       "npm:lodash.merge",
+      "npm:long",
       "npm:path-to-regexp",
-      "npm:reflect-metadata"
+      "npm:reflect-metadata",
+      "npm:zod"
     ],
     "packageJson": {
       "dependencies": [
@@ -2366,7 +2380,8 @@
         "npm:nodemon@^3.1.4",
         "npm:pg@^8.12.0",
         "npm:ts-node@^10.9.2",
-        "npm:tsup@^8.2.2"
+        "npm:tsup@^8.2.2",
+        "npm:zod@^3.23.8"
       ]
     }
   }

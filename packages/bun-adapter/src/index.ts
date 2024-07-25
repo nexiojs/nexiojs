@@ -7,7 +7,7 @@ import {
 import "./polyfills/compress-stream.ts";
 
 export class BunAdapter extends Adapter {
-  createServer(options: IAdapterOptions): void {
+  async createServer(options: IAdapterOptions): Promise<void> {
     const { application, port = 3000 } = options;
 
     Bun.serve({

@@ -1,6 +1,13 @@
 import { Adapter, type IAdapterOptions } from "@nexiojs/common";
-import { Injectable, createApplication, resolveDI } from "@nexiojs/core";
-import { Client, GrpcClient } from "@nexiojs/microservice";
+import {
+  Controller,
+  Get,
+  Injectable,
+  createApplication,
+  resolveDI,
+} from "@nexiojs/core";
+import { Client, GrpcClient, IMicroservice } from "@nexiojs/microservice";
+import { DenoAdapter } from "@nexiojs/deno-adapter";
 
 @Injectable()
 class PersonService {
@@ -12,19 +19,19 @@ class PersonService {
   }
 }
 
-const main = async () => {
-  class Dummy extends Adapter {
-    createServer(options: IAdapterOptions): void {}
+@Controller("/health")
+class HealthController {
+  @Get("/")
+  health() {
+    return "OK";
   }
+}
 
-  const app = createApplication({
-    adapter: Dummy,
+const main = async () => {
+  const app = await createApplication<IMicroservice>({
+    adapter: new DenoAdapter(),
   });
-  await app.connectMicroservices();
-
-  console.log(
-    await resolveDI(PersonService).client.get("PersonService").GetPerson({})
-  );
+  await app.connectMicroservices([]);
 };
 
 main();

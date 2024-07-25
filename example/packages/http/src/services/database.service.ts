@@ -5,14 +5,14 @@ import { ConfigService } from "./config.service.ts";
 
 @Injectable()
 export class DatabaseService {
-  #pool: pg.Pool;
+  pool: pg.Pool;
   db: NodePgDatabase;
 
   constructor(private readonly configService: ConfigService) {
-    this.#pool = new pg.Pool({
+    this.pool = new pg.Pool({
       connectionString: configService.get("databaseUrl"),
     });
 
-    this.db = drizzle(this.#pool);
+    this.db = drizzle(this.pool);
   }
 }

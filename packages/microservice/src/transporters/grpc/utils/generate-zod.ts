@@ -1,8 +1,8 @@
 import { CUSTOM_METADATA, DecoratorKind } from "@nexiojs/common";
 import { z } from "zod";
-import { FIELD } from "../metadata/symbols";
-import { FieldOptions } from "../types/field-options.type";
-import { FieldNode } from "../ast/node";
+import { FIELD } from "../metadata/symbols.ts";
+import { FieldOptions } from "../types/field-options.type.ts";
+import { FieldNode } from "../ast/node.ts";
 
 export const generateZod = (fn: Function) => {
   const input: any = Reflect.getMetadata(CUSTOM_METADATA, fn)?.find(
