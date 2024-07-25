@@ -17,10 +17,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js LTS
+      - name: Setup Node.js
         uses: actions/setup-node@master
         with:
-          node-version: lts
+          node-version: 22.x
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
