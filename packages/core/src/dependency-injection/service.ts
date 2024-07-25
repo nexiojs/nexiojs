@@ -9,11 +9,9 @@ import {
   resolveParams,
   type Constructor,
 } from "@nexiojs/common";
-import { CallOptions } from "../types/call.type.ts";
-import type { InjectableOptions } from "../types/injectable.type.ts";
-import { NexioEventEmitter } from "../core/event-emitter.ts";
-import { Call, Controller, Get, Injectable, resolveDI } from "../index.ts";
 import last from "lodash.last";
+import type { CallOptions } from "../types/call.type.ts";
+import type { InjectableOptions } from "../types/injectable.type.ts";
 
 class Container {
   private instances: Map<any, any> = new Map();
@@ -30,7 +28,6 @@ class Container {
       const instance = this.createInstance(cls);
       this.instances.set(cls, instance);
     }
-
     return this.instances.get(cls);
   }
 
