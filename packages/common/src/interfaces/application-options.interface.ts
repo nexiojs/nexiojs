@@ -3,10 +3,10 @@ import type { Constructor } from "./constructor.interface";
 import type { IInterceptor } from "./interceptor.interface";
 
 export interface ApplicationOptions {
-  port: number;
+  port?: number; // default 3000
 
   compress?: boolean;
-  adapter: Constructor<Adapter> | Adapter;
+  adapter: Adapter;
   interceptors?: Constructor<IInterceptor>[];
   hostname?: string;
 }

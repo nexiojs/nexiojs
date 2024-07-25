@@ -17,26 +17,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js 20.x
+      - name: Setup Node.js LTS
         uses: actions/setup-node@master
         with:
-          node-version: 20.x
+          node-version: lts
 
-      - name: Install PNPM
-        run: npm i -g pnpm
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install Dependencies
-        run: pnpm i
+        run: bun install
 
       - name: Build Projects
-        run: pnpm build
+        run: bun run build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@master
         if: startsWith(github.event.head_commit.message, 'release')
         with:
-          publish: pnpm release
+          publish: bun run release
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

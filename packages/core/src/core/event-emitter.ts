@@ -1,4 +1,4 @@
-import "../polyfills/promise";
+import "../polyfills/promise.ts";
 
 import type {
   Constructor,
@@ -17,7 +17,6 @@ import {
 } from "@nexiojs/common";
 import isNil from "lodash.isnil";
 import { match } from "path-to-regexp";
-import { HttpExeception, resolveDI } from "..";
 import {
   AUTH_GUARD_EVENT,
   AUTH_GUARD_FAILED_EVENT,
@@ -25,11 +24,13 @@ import {
   GLOBAL_PRE_INTERCEPTOR_EVENT,
   POST_INTERCEPTOR_EVENT,
   PRE_INTERCEPTOR_EVENT,
-} from "../constants/event.constant";
-import { Context } from "../decorators/context.decorator";
-import { getContainer } from "../dependency-injection/service";
-import { NotFoundError } from "../errors/not-found.error";
-import type { CallOptions } from "src/types/call.type";
+} from "../constants/event.constant.ts";
+import { Context } from "../decorators/context.decorator.ts";
+import { resolveDI } from "../dependency-injection/resolve.ts";
+import { getContainer } from "../dependency-injection/service.ts";
+import { HttpExeception } from "../errors/http.error.ts";
+import { NotFoundError } from "../errors/not-found.error.ts";
+import type { CallOptions } from "../types/call.type.ts";
 
 export class NexioEventEmitter extends IEventEmitter<IContext> {
   private guards: Record<string, Constructor<IAuthGuard>[]> = {};
@@ -98,14 +99,6 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
 
   private async handleAuthGuardFail(@Context() ctx: IContext) {
     throw new HttpExeception("Unauthorized", 403);
-    // ctx.res.body = "Authorized";
-    // ctx.res.status = 403;
-    // return new Response(JSON.stringify({ message: "Authorized" }), {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   status: 403,
-    // });
   }
 
   private async handlePreGlobalInterceptor(@Context() ctx: IContext) {
@@ -161,7 +154,23 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
       }
     }
 
-    const res = await resolveParams(fn, ctx, instance).catch((e: Error) => e);
+    const proxyFn = new Proxy(fn, {
+      apply: async (target, thisArg, argArray) => {
+        argArray.push(ctx);
+        const result = await Reflect.apply(target, thisArg, argArray);
+
+        return result;
+      },
+    });
+    const keys = Reflect.getMetadataKeys(fn);
+    keys.forEach((key) => {
+      const metadata = Reflect.getMetadata(key, fn);
+      Reflect.defineMetadata(key, metadata, proxyFn);
+    });
+
+    const res = await resolveParams(proxyFn, ctx, instance).catch(
+      (e: Error) => e
+    );
     ctx.res.body = res;
 
     {

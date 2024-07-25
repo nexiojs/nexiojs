@@ -1,7 +1,7 @@
 {
   "name": "@nexiojs/core",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsup --config ../../config.ts",
@@ -9,12 +9,14 @@
   },
   "devDependencies": {
     "@types/bun": "^1.1.6",
+    "@types/lodash.last": "^3.0.9",
     "typescript": "^5.5.3"
   },
   "dependencies": {
     "@nexiojs/common": "workspace:*",
     "@types/lodash.isnil": "^4.0.9",
     "lodash.isnil": "^4.0.0",
+    "lodash.last": "^3.0.0",
     "path-to-regexp": "^7.0.0"
   },
   "main": "dist/index.cjs",

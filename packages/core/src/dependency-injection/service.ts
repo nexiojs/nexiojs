@@ -1,7 +1,17 @@
 import "reflect-metadata";
+import "../polyfills/promise.ts";
 
-import { INJECTABLE_METADATA, type Constructor } from "@nexiojs/common";
-import type { InjectableOptions } from "src/types/injectable.type";
+import {
+  CALL_METADATA,
+  INJECTABLE_METADATA,
+  IsConstructor,
+  IsFunction,
+  resolveParams,
+  type Constructor,
+} from "@nexiojs/common";
+import last from "lodash.last";
+import type { CallOptions } from "../types/call.type.ts";
+import type { InjectableOptions } from "../types/injectable.type.ts";
 
 class Container {
   private instances: Map<any, any> = new Map();
@@ -31,7 +41,55 @@ class Container {
       return Instance;
     });
 
-    return new cls(...dependencies);
+    const Instance = new cls(...dependencies) as any;
+    Object.getOwnPropertyNames(cls.prototype).forEach((val) => {
+      if (!IsConstructor(val) && IsFunction(cls.prototype[val])) {
+        const rpc = Reflect.getMetadata(CALL_METADATA, Instance[val]) ?? [];
+
+        if (rpc.length === 0) return;
+
+        const runChain = async (result: any, argArray: any) => {
+          const ctx = last(argArray);
+
+          await Promise.chain(
+            rpc?.map(({ when, instance, method }: CallOptions) => {
+              if (when(result)) {
+                const Instance = this.get(instance);
+                return resolveParams(Instance[method], ctx, Instance);
+              }
+            })
+          );
+        };
+
+        const proxyFn = new Proxy(Instance[val], {
+          get(target, p, receiver) {
+            return target[p];
+          },
+          apply: async (target: any, thisArg: any, argArray: any) => {
+            try {
+              const result = await Reflect.apply(target, thisArg, argArray);
+              await runChain(result, argArray);
+
+              return result;
+            } catch (err) {
+              await runChain(err, argArray);
+
+              return err;
+            }
+          },
+        });
+
+        const keys = Reflect.getMetadataKeys(Instance[val]);
+        keys.forEach((key) => {
+          const metadata = Reflect.getMetadata(key, Instance[val]);
+          Reflect.defineMetadata(key, metadata, proxyFn);
+        });
+
+        Instance[val] = proxyFn;
+      }
+    });
+
+    return Instance;
   }
 }
 

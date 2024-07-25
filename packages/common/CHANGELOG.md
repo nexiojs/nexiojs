@@ -1,5 +1,11 @@
 # @nexiojs/common
 
+## 0.0.5
+
+### Patch Changes
+
+- support deno and call decorator
+
 ## 0.0.4
 
 ### Patch Changes

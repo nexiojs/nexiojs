@@ -13,11 +13,11 @@ import {
   GLOBAL_POST_INTERCEPTOR_EVENT,
   GLOBAL_PRE_INTERCEPTOR_EVENT,
 } from "../constants/event.constant.ts";
-import { getContainer } from "../dependency-injection/service.ts";
+import { resolveDI } from "../dependency-injection/resolve.ts";
 import { pathToEvent } from "../utils/path-to-event.ts";
 import { NexioEventEmitter } from "./event-emitter.ts";
 
-export class Application implements IApplication<any> {
+export class Application implements IApplication<IContext> {
   private eventEmitter = new NexioEventEmitter();
 
   constructor() {}
@@ -25,10 +25,10 @@ export class Application implements IApplication<any> {
   init() {
     try {
       const controllers: Constructor[] =
-        Reflect.getMetadata(CONTROLLER_METADATA, global) ?? [];
+        Reflect.getMetadata(CONTROLLER_METADATA, globalThis) ?? [];
 
       controllers.forEach((Controller) => {
-        const instance = getContainer().get(Controller);
+        const instance = resolveDI(Controller);
         const prototype = Object.getPrototypeOf(instance);
         const methodsNames = Object.getOwnPropertyNames(prototype).filter(
           (item) => !IsConstructor(item) && IsFunction(prototype[item])

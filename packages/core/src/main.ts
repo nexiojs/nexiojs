@@ -1,21 +1,15 @@
 import {
-  Adapter as BaseAdapter,
-  Kind,
   type ApplicationOptions,
+  type IApplication,
+  type IContext,
 } from "@nexiojs/common";
-import { Application } from "./core/application";
-import { getContainer } from "./dependency-injection/service";
+import { Application } from "./core/application.ts";
+import { getContainer } from "./dependency-injection/service.ts";
 
-export const createApplication = (options: ApplicationOptions) => {
-  let Adapter = options.adapter;
-
-  // @ts-ignore
-  if (options.adapter.kind !== Kind.Http) {
-    Adapter = options.adapter;
-  } else {
-    // @ts-ignore
-    Adapter = new options.adapter();
-  }
+export const createApplication = async <T = IApplication<IContext>>(
+  options: ApplicationOptions
+): Promise<T> => {
+  const Adapter = options.adapter;
 
   const application = new Application().init();
 
@@ -23,9 +17,11 @@ export const createApplication = (options: ApplicationOptions) => {
     getContainer().get(Interceptor)
   );
 
-  return (Adapter as BaseAdapter).createServer({
+  await Adapter.createServer({
     ...options,
     application,
     interceptors,
   });
+
+  return application as T;
 };

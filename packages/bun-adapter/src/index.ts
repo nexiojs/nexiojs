@@ -1,14 +1,14 @@
-import "./polyfills/compress-stream";
 import {
   Adapter,
   compress,
   createContext,
   type IAdapterOptions,
 } from "@nexiojs/common";
+import "./polyfills/compress-stream.ts";
 
 export class BunAdapter extends Adapter {
-  createServer(options: IAdapterOptions): void {
-    const { application, port } = options;
+  async createServer(options: IAdapterOptions): Promise<void> {
+    const { application, port = 3000 } = options;
 
     Bun.serve({
       port,

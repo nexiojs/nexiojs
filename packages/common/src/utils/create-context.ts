@@ -1,7 +1,7 @@
 import merge from "lodash.merge";
 import type { IAdapterOptions } from "../adapter/base.adapter.ts";
 import { bodyParser } from "../body-parser.ts";
-import { RABBIT_GLOBA_INTERCEPTOR } from "../constants";
+import { RABBIT_GLOBA_INTERCEPTOR } from "../constants/index.ts";
 import type { IContext } from "../interfaces/context.interface.ts";
 
 export const createContext = async (

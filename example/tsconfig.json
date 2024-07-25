@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "paths": {
+      "@nexiojs/core": ["../packages/core/src"],
+      "@nexiojs/common": ["../packages/common/src"],
+      "@nexiojs/graphql": ["../packages/graphql/src"],
+      "@nexiojs/bun-adapter": ["../packages/bun-adapter/src"],
+      "@nexiojs/node-adapter": ["../packages/node-adapter/src"],
+      "@nexiojs/microservice": ["../packages/microservice/src"],
+      "@nexiojs/deno-adapter": ["../packages/deno-adapter/src"]
+    },
+    "baseUrl": ".",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "ts-node": { "esm": true }
+}

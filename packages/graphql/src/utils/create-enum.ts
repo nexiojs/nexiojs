@@ -14,7 +14,7 @@ export const createEnumType = (
   instance: Object,
   config: CreateEnumTypeConfig
 ) => {
-  const enums = Reflect.getMetadata(ENUM_TYPE_METADATA, global) ?? {};
+  const enums = Reflect.getMetadata(ENUM_TYPE_METADATA, globalThis) ?? {};
 
   const values: Record<string, GraphQLEnumValueConfig> = {};
 
@@ -33,7 +33,7 @@ export const createEnumType = (
   Reflect.defineMetadata(
     ENUM_TYPE_METADATA,
     { ...enums, [config.name]: enumType },
-    global
+    globalThis
   );
 
   return enumType;
