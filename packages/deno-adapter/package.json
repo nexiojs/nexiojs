@@ -1,5 +1,6 @@
 {
   "name": "@nexiojs/deno-adapter",
+  "version": "0.0.6",
   "type": "module",
   "scripts": {
     "prebuild": "rimraf dist",
