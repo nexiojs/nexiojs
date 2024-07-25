@@ -7,6 +7,7 @@ import type {
   IInterceptor,
 } from "@nexiojs/common";
 import {
+  CALL_METADATA,
   IEventEmitter,
   INTERCEPTOR_METADATA,
   RABBIT_AUTH_GUARD,
@@ -25,9 +26,11 @@ import {
   PRE_INTERCEPTOR_EVENT,
 } from "../constants/event.constant.ts";
 import { Context } from "../decorators/context.decorator.ts";
+import { resolveDI } from "../dependency-injection/resolve.ts";
 import { getContainer } from "../dependency-injection/service.ts";
 import { HttpExeception } from "../errors/http.error.ts";
 import { NotFoundError } from "../errors/not-found.error.ts";
+import type { CallOptions } from "../types/call.type.ts";
 
 export class NexioEventEmitter extends IEventEmitter<IContext> {
   private guards: Record<string, Constructor<IAuthGuard>[]> = {};
@@ -169,6 +172,19 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
       (e: Error) => e
     );
     ctx.res.body = res;
+
+    {
+      const rpc = Reflect.getMetadata(CALL_METADATA, fn) ?? [];
+      await Promise.chain(
+        rpc.map(({ when, instance, method }: CallOptions) => {
+          if (when(res)) {
+            const Instance = resolveDI(instance);
+
+            return resolveParams(Instance[method], ctx, Instance);
+          }
+        })
+      );
+    }
 
     await this.emitInternal(POST_INTERCEPTOR_EVENT, ctx);
 

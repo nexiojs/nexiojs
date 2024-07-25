@@ -1,5 +1,5 @@
-import type { Constructor } from "./constructor.interface";
-import type { IContext } from "./context.interface";
+import type { Constructor } from "./constructor.interface.ts";
+import type { IContext } from "./context.interface.ts";
 
 export interface IApplication<T = IContext> {
   init: () => void;

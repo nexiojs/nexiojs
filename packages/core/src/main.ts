@@ -1,6 +1,4 @@
 import {
-  Adapter as BaseAdapter,
-  Kind,
   type ApplicationOptions,
   type IApplication,
   type IContext,
@@ -12,14 +10,6 @@ export const createApplication = async <T = IApplication<IContext>>(
   options: ApplicationOptions
 ): Promise<T> => {
   const Adapter = options.adapter;
-
-  // @ts-ignore
-  // if (options.adapter.kind !== Kind.Http) {
-  //   Adapter = options.adapter;
-  // } else {
-  //   // @ts-ignore
-  //   Adapter = new options.adapter();
-  // }
 
   const application = new Application().init();
 
