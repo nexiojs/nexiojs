@@ -1,5 +1,3 @@
-import "../types/common.d.ts";
-
 import { CUSTOM_PROPERTY, DecoratorKind } from "@nexiojs/common";
 import { Application, resolveDI } from "@nexiojs/core";
 import { createClient } from "../clients/create.ts";
