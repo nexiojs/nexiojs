@@ -11,7 +11,6 @@ import {
   IEventEmitter,
   INTERCEPTOR_METADATA,
   RABBIT_AUTH_GUARD,
-  RABBIT_GLOBA_INTERCEPTOR,
   RABBIT_INTERCEPTOR,
   resolveParams,
 } from "@nexiojs/common";
@@ -20,6 +19,7 @@ import { match } from "path-to-regexp";
 import {
   AUTH_GUARD_EVENT,
   AUTH_GUARD_FAILED_EVENT,
+  DONE_EVENT,
   GLOBAL_POST_INTERCEPTOR_EVENT,
   GLOBAL_PRE_INTERCEPTOR_EVENT,
   POST_INTERCEPTOR_EVENT,
@@ -35,6 +35,8 @@ import type { CallOptions } from "../types/call.type.ts";
 export class NexioEventEmitter extends IEventEmitter<IContext> {
   private guards: Record<string, Constructor<IAuthGuard>[]> = {};
   private refs: Record<string, Constructor> = {};
+
+  private interceptors: IInterceptor[] = [];
 
   constructor() {
     super();
@@ -52,6 +54,10 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
     this.events[POST_INTERCEPTOR_EVENT] = [this.handlePostInterceptor as any];
   }
 
+  addInterceptor(interceptor: IInterceptor) {
+    this.interceptors.push(interceptor);
+  }
+
   setRef(path: string, ref: Constructor) {
     this.refs[path] = ref;
   }
@@ -64,11 +70,15 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
   }
 
   async emitInternal(event: string, ctx: IContext) {
-    const [listener] = this.events[event] ?? [];
+    const listeners = this.events[event] ?? [];
 
-    if (!listener) return;
+    if (listeners.length === 0) return;
 
-    return resolveParams(listener, ctx, this.refs[event] ?? this);
+    return Promise.all(
+      listeners.map((listener) =>
+        resolveParams(listener, ctx, this.refs[event] ?? this)
+      )
+    );
   }
 
   private async handleAuthGuard(@Context() ctx: IContext) {
@@ -102,16 +112,15 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
   }
 
   private async handlePreGlobalInterceptor(@Context() ctx: IContext) {
+    console.log(this.interceptors);
     await Promise.chain(
-      (ctx[RABBIT_GLOBA_INTERCEPTOR] ?? []).map((interceptor: IInterceptor) =>
-        interceptor.pre(ctx)
-      )
+      this.interceptors.map((interceptor: IInterceptor) => interceptor.pre(ctx))
     );
   }
 
   private async handlePostGlobalInterceptor(@Context() ctx: IContext) {
     await Promise.chain(
-      (ctx[RABBIT_GLOBA_INTERCEPTOR] ?? []).map((interceptor: IInterceptor) =>
+      this.interceptors.map((interceptor: IInterceptor) =>
         interceptor.post(ctx)
       )
     );
@@ -147,9 +156,8 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
     }
 
     {
-      const res = await this.emitInternal(AUTH_GUARD_EVENT, ctx);
-
-      if (typeof res !== "boolean") {
+      const res = (await this.emitInternal(AUTH_GUARD_EVENT, ctx)) ?? [];
+      if (typeof res[0] !== "boolean") {
         return [res];
       }
     }
@@ -172,19 +180,6 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
       (e: Error) => e
     );
     ctx.res.body = res;
-
-    {
-      const rpc = Reflect.getMetadata(CALL_METADATA, fn) ?? [];
-      await Promise.chain(
-        rpc.map(({ when, instance, method }: CallOptions) => {
-          if (when(res)) {
-            const Instance = resolveDI(instance);
-
-            return resolveParams(Instance[method], ctx, Instance);
-          }
-        })
-      );
-    }
 
     await this.emitInternal(POST_INTERCEPTOR_EVENT, ctx);
 
@@ -221,6 +216,7 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
     }
 
     await this.emitInternal(GLOBAL_POST_INTERCEPTOR_EVENT, ctx);
+    await this.emitInternal(DONE_EVENT, ctx);
 
     if (isNil(res)) throw new NotFoundError();
 

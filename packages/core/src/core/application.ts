@@ -1,13 +1,16 @@
 import {
   AUTH_GUARD_METADATA,
   CONTROLLER_METADATA,
+  IInterceptor,
   IsConstructor,
   IsFunction,
   METHOD_METADATA,
   PATH_METADATA,
+  type ApplicationInitOptions,
   type Constructor,
   type IApplication,
   type IContext,
+  type IPlugin,
 } from "@nexiojs/common";
 import {
   GLOBAL_POST_INTERCEPTOR_EVENT,
@@ -22,42 +25,38 @@ export class Application implements IApplication<IContext> {
 
   constructor() {}
 
-  init() {
-    try {
-      const controllers: Constructor[] =
-        Reflect.getMetadata(CONTROLLER_METADATA, globalThis) ?? [];
+  async init(options: ApplicationInitOptions) {
+    options.interceptors.forEach((interceptor) => {
+      this.addInterceptor(interceptor);
+    });
 
-      controllers.forEach((Controller) => {
-        const instance = resolveDI(Controller);
-        const prototype = Object.getPrototypeOf(instance);
-        const methodsNames = Object.getOwnPropertyNames(prototype).filter(
-          (item) => !IsConstructor(item) && IsFunction(prototype[item])
-        );
-        const rootPath = Reflect.getMetadata(
-          PATH_METADATA,
-          instance.constructor
-        );
+    const controllers: Constructor[] =
+      Reflect.getMetadata(CONTROLLER_METADATA, globalThis) ?? [];
 
-        methodsNames.forEach((methodName) => {
-          let fn = instance[methodName];
-          const route = Reflect.getMetadata(PATH_METADATA, fn);
-          const method = Reflect.getMetadata(METHOD_METADATA, fn);
-          const guards: any[] =
-            Reflect.getMetadata(AUTH_GUARD_METADATA, fn) ?? [];
-          const path = pathToEvent(`${rootPath}${route}`, method);
-          this.eventEmitter.setGuards(path, guards);
+    controllers.forEach((Controller) => {
+      const instance = resolveDI(Controller);
+      const prototype = Object.getPrototypeOf(instance);
+      const methodsNames = Object.getOwnPropertyNames(prototype).filter(
+        (item) => !IsConstructor(item) && IsFunction(prototype[item])
+      );
+      const rootPath = Reflect.getMetadata(PATH_METADATA, instance.constructor);
 
-          // To bind this ref
-          this.eventEmitter.setRef(path, instance);
-          this.eventEmitter.on(path, fn);
-        });
+      methodsNames.forEach((methodName) => {
+        let fn = instance[methodName];
+        const route = Reflect.getMetadata(PATH_METADATA, fn);
+        const method = Reflect.getMetadata(METHOD_METADATA, fn);
+        const guards: any[] =
+          Reflect.getMetadata(AUTH_GUARD_METADATA, fn) ?? [];
+        const path = pathToEvent(`${rootPath}${route}`, method);
+        this.eventEmitter.setGuards(path, guards);
+
+        // To bind this ref
+        this.eventEmitter.setRef(path, instance);
+        this.eventEmitter.on(path, fn);
       });
+    });
 
-      return this;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
+    return this as IApplication<IContext>;
   }
 
   async emitAsync(event: string, ctx: IContext) {
@@ -68,6 +67,10 @@ export class Application implements IApplication<IContext> {
 
   async on(event: string, listener: any) {
     return this.eventEmitter.on(event, listener);
+  }
+
+  once(event: string, listener: any) {
+    this.eventEmitter.once(event, listener);
   }
 
   setRef(path: string, ref: Constructor<any>) {
@@ -84,5 +87,13 @@ export class Application implements IApplication<IContext> {
     await this.emitInternal(GLOBAL_POST_INTERCEPTOR_EVENT, ctx);
 
     return res;
+  }
+
+  async use(plugin: IPlugin) {
+    await plugin.apply(this as IApplication<IContext>);
+  }
+
+  addInterceptor(interceptor: IInterceptor<IContext>) {
+    this.eventEmitter.addInterceptor(interceptor);
   }
 }

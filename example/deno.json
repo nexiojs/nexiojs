@@ -7,6 +7,7 @@
     "@nexiojs/microservice": "../packages/microservice/src/index.ts",
     "@nexiojs/graphql": "../packages/graphql/src/index.ts",
     "@nexiojs/deno-adapter": "../packages/deno-adapter/src/index.ts",
+    "@nexiojs/plugins": "../packages/plugins/src/index.ts",
     "reflect-metadata": "npm:reflect-metadata",
     "lodash.merge": "npm:lodash.merge",
     "grpc-reflection-js": "npm:grpc-reflection-js",

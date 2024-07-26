@@ -1,7 +1,6 @@
 import merge from "lodash.merge";
 import type { IAdapterOptions } from "../adapter/base.adapter.ts";
 import { bodyParser } from "../body-parser.ts";
-import { RABBIT_GLOBA_INTERCEPTOR } from "../constants/index.ts";
 import type { IContext } from "../interfaces/context.interface.ts";
 
 export const createContext = async (
@@ -14,12 +13,11 @@ export const createContext = async (
   }
 
   const event = `${request.method.toUpperCase()}__${pathname}`;
-  const { application, port, interceptors, makeContext, ...rest } = options;
+  const { application, port, makeContext, ...rest } = options;
 
   const ctx: IContext = {
     ...rest,
     application,
-    [RABBIT_GLOBA_INTERCEPTOR]: interceptors,
     req: {
       ...request,
       body: await bodyParser(request),

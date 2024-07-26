@@ -1,10 +1,8 @@
-import "./common.d.ts";
-
-import { IApplication as CoreIApplication } from "@nexiojs/common";
+import { IApplication, IContext } from "@nexiojs/common";
 import type { ClientOptions } from "./client-options.type.ts";
 import type { TransporterOptions } from "./transporter-options.type.ts";
 
-export interface IMicroservice extends CoreIApplication {
+export interface IMicroservice extends IApplication<IContext> {
   connectMicroservices: (
     services: (ClientOptions & { id: string })[]
   ) => Promise<void>;
