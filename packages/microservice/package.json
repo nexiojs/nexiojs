@@ -1,6 +1,6 @@
 {
   "name": "@nexiojs/microservice",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "scripts": {
     "prebuild": "rimraf dist",

@@ -3,8 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "release": "changeset publish",
-    "prepublish": "bun run ./scripts/prepublish.ts",
+    "release": "bun run ./scripts/prepublish.ts && changeset publish",
     "build:common": "bun run --filter=@nexiojs/common build",
     "build:core": "bun run --filter=@nexiojs/core build",
     "build:rest": "find packages -mindepth 1 -maxdepth 1 -type d | grep -v 'common\\|core' | grep -v 'packages$' | sed -e 's/packages/@nexiojs/g' | xargs -I {} bun run --filter {} build",
