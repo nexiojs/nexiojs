@@ -11,7 +11,8 @@
       "@nexiojs/bun-adapter": ["../packages/bun-adapter/src"],
       "@nexiojs/node-adapter": ["../packages/node-adapter/src"],
       "@nexiojs/microservice": ["../packages/microservice/src"],
-      "@nexiojs/deno-adapter": ["../packages/deno-adapter/src"]
+      "@nexiojs/deno-adapter": ["../packages/deno-adapter/src"],
+      "@nexiojs/plugins": ["../packages/plugins/src"]
     },
     "baseUrl": ".",
     "noEmit": true,

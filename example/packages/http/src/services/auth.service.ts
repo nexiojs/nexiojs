@@ -53,6 +53,8 @@ export class AuthService {
   }
 
   async rollback(@Context() ctx: any) {
+    console.log("rollback");
+
     return "";
   }
 }

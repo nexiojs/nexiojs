@@ -44,6 +44,7 @@ const commitlintConfig: UserConfig = {
         "apollo",
         "microservice",
         "deno",
+        "plugins",
       ],
     ],
   },

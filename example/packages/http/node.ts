@@ -1,20 +1,27 @@
 import "./src/setup.ts";
 
 import "@nexiojs/bun-adapter";
-import { IMicroservice } from "@nexiojs/microservice";
 
+import { IApplication } from "@nexiojs/common";
 import { createApplication } from "@nexiojs/core";
+import { IMicroservice } from "@nexiojs/microservice";
 import { NodeAdapter } from "@nexiojs/node-adapter";
-import { CORSInterceptor } from "./src/interceptors/cors.interceptor.ts";
+import { CORSPlugin } from "@nexiojs/plugins";
 import { JwtInterceptor } from "./src/interceptors/jwt.interceptor.ts";
 
 const main = async () => {
-  await createApplication<IMicroservice>({
+  const app = await createApplication<IMicroservice & IApplication>({
     adapter: new NodeAdapter(),
     compress: true,
-    interceptors: [JwtInterceptor, CORSInterceptor],
+    interceptors: [JwtInterceptor],
     port: 3000,
   });
+
+  app.use(
+    new CORSPlugin({
+      origin: ["*"],
+    })
+  );
 
   // await app.connectMicroservices([
   // {

@@ -1,13 +1,6 @@
-import { Adapter, type IAdapterOptions } from "@nexiojs/common";
-import {
-  Controller,
-  Get,
-  Injectable,
-  createApplication,
-  resolveDI,
-} from "@nexiojs/core";
-import { Client, GrpcClient, IMicroservice } from "@nexiojs/microservice";
+import { Controller, Get, Injectable, createApplication } from "@nexiojs/core";
 import { DenoAdapter } from "@nexiojs/deno-adapter";
+import { Client, GrpcClient, IMicroservice } from "@nexiojs/microservice";
 
 @Injectable()
 class PersonService {
@@ -31,6 +24,7 @@ const main = async () => {
   const app = await createApplication<IMicroservice>({
     adapter: new DenoAdapter(),
   });
+
   await app.connectMicroservices([]);
 };
 
