@@ -12,8 +12,9 @@ export class BunAdapter extends Adapter {
 
     Bun.serve({
       port,
-      fetch: async (request) => {
+      fetch: async (request, server) => {
         const ctx = await createContext(options, request);
+        ctx.req.ip ??= server.requestIP(request)?.address!;
 
         await application.emitAsync(ctx.event, ctx).catch((err) => {
           ctx.res.body = err.message;

@@ -2,11 +2,17 @@ import "./src/setup.ts";
 
 import "@nexiojs/bun-adapter";
 
-import { IApplication } from "@nexiojs/common";
+import { IApplication, IContext } from "@nexiojs/common";
 import { createApplication } from "@nexiojs/core";
 import { IMicroservice } from "@nexiojs/microservice";
 import { NodeAdapter } from "@nexiojs/node-adapter";
-import { CORSPlugin } from "@nexiojs/plugins";
+import {
+  CORSPlugin,
+  FixedWindowStrategy,
+  InMemoryStorage,
+  Throttler,
+  ThrottlerPlugun,
+} from "@nexiojs/plugins";
 import { JwtInterceptor } from "./src/interceptors/jwt.interceptor.ts";
 
 const main = async () => {
@@ -16,6 +22,19 @@ const main = async () => {
     interceptors: [JwtInterceptor],
     port: 3000,
   });
+
+  app.use(
+    new ThrottlerPlugun({
+      throttler: new Throttler({
+        strategy: new FixedWindowStrategy({
+          limit: 10,
+          ttl: 60000,
+        }),
+        storage: new InMemoryStorage(),
+      }),
+      tracer: (ctx: IContext) => ctx.req.ip,
+    })
+  );
 
   app.use(
     new CORSPlugin({

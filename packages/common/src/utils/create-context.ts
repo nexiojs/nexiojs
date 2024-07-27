@@ -25,6 +25,7 @@ export const createContext = async (
       search,
       method: request.method.toUpperCase(),
       searchParams,
+      ip: request.headers.get("x-forwarded-for")!,
     },
     event,
     res: {

@@ -85,6 +85,7 @@ export class NodeAdapter extends Adapter {
       const host = req.headers.host ?? hostname;
       const request = await createRequest(req, host!);
       const ctx = await createContext(options, request);
+      ctx.req.ip ??= req.socket.remoteAddress!;
 
       await application.emitAsync(ctx.event, ctx).catch((err) => {
         ctx.res.body = err.message;
