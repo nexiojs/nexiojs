@@ -12,6 +12,7 @@ export class DenoAdapter extends Adapter {
     // @ts-ignore
     Deno.serve(
       { port },
+      // @ts-ignore
       async (request: Request, conn: Deno.ServeHandlerInfo) => {
         const ctx = await createContext(options, request);
         ctx.req.ip ??= conn.remoteAddr.hostname;
