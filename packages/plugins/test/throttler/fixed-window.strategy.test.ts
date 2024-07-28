@@ -25,7 +25,7 @@ describe("FixedWindowStrategy", () => {
   });
 
   it("should not allow request when count reaches limit", async () => {
-    storage.get.mockResolvedValue(4);
+    storage.get.mockResolvedValue(5);
     expect(await strategy.isAllow("test", storage)).toBe(false);
     expect(storage.set).not.toHaveBeenCalled();
   });
