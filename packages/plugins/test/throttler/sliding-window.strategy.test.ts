@@ -1,7 +1,11 @@
-import { describe, it, expect } from "bun:test";
+import { describe, it, expect, beforeEach } from "bun:test";
 import { InMemoryStorage, SlidingWindowStrategy } from "../../src/throttler";
 
 const storage = new InMemoryStorage();
+
+beforeEach(() => {
+  storage.clear();
+});
 
 describe("SlidingWindowStrategy", () => {
   it("should allow requests within the limit", async () => {

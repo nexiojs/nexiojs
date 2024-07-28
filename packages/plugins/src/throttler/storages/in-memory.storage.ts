@@ -3,6 +3,10 @@ import { Storage } from "../interfaces/storage.interface.ts";
 export class InMemoryStorage implements Storage {
   private stores: Map<string, { value: number; expiresAt: number }> = new Map();
 
+  async clear() {
+    this.stores = new Map();
+  }
+
   async get(key: string): Promise<number | null> {
     const store = this.stores.get(key);
 
