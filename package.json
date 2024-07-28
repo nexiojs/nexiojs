@@ -11,8 +11,6 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@nexiojs/common": "workspace:*",
-    "@nexiojs/core": "workspace:*",
     "@changesets/cli": "^2.27.7",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
