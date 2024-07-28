@@ -9,7 +9,7 @@ export class FixedWindowStrategy implements ThrottleStrategy {
     const { limit, ttl } = this.options;
     const currentCount = (await storage.get(key)) ?? 0;
 
-    if (currentCount + 1 > limit) return false;
+    if (currentCount >= limit) return false;
 
     await storage.set(key, currentCount + 1, ttl);
 

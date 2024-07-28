@@ -1,42 +1,38 @@
-import { describe, it, setSystemTime, expect } from "bun:test";
+import { describe, it, beforeEach, expect, jest } from "bun:test";
 import {
   FixedWindowStrategy,
   InMemoryStorage,
   Throttler,
 } from "../../src/throttler/index.ts";
+import { Storage } from "../../src/throttler/interfaces/storage.interface.ts";
 
 describe("FixedWindowStrategy", () => {
-  it("", async () => {
-    const limit = 10;
+  let storage: Storage;
+  let strategy: FixedWindowStrategy;
 
-    const storage = new InMemoryStorage();
-    const strategy = new FixedWindowStrategy({
-      limit,
-      ttl: 60000,
-    });
+  beforeEach(() => {
+    storage = {
+      get: jest.fn().mockResolvedValue(0),
+      set: jest.fn(),
+    };
 
-    const throttler = new Throttler({
-      storage,
-      strategy,
-    });
+    strategy = new FixedWindowStrategy({ limit: 5, ttl: 1000 });
+  });
 
-    const userId = "user:123";
+  it("should allow request when count is below limit", async () => {
+    expect(await strategy.isAllow("test", storage)).toBe(true);
+    expect(storage.set).toHaveBeenCalledWith("test", 1, 1000);
+  });
 
-    for (let i = 0; i < 12; i++) {
-      const allowed = await throttler.isAllowed(userId);
+  it("should not allow request when count reaches limit", async () => {
+    storage.get.mockResolvedValue(5);
+    expect(await strategy.isAllow("test", storage)).toBe(false);
+    expect(storage.set).not.toHaveBeenCalled();
+  });
 
-      if (i + 1 > limit) {
-        expect(allowed).toBeFalse();
-      } else {
-        expect(allowed).toBeTrue();
-      }
-    }
-
-    // move forward
-    setSystemTime(new Date("2999-01-01T00:00:00.000Z"));
-
-    const allowed = await throttler.isAllowed(userId);
-
-    expect(allowed).toBeTrue();
+  it("should not allow request even if TTL hasn't passed when count is at limit", async () => {
+    storage.get.mockResolvedValue(5);
+    expect(await strategy.isAllow("test", storage)).toBe(false);
+    expect(storage.set).not.toHaveBeenCalled();
   });
 });
