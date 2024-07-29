@@ -1,6 +1,6 @@
 import type { IApplication } from ".";
 
-export type IContext<Body = any> = {
+export interface IContext<Body = any> {
   application: IApplication<IContext>;
   req: {
     body: any;
@@ -11,4 +11,6 @@ export type IContext<Body = any> = {
   } & Pick<Request, "headers" | "signal" | "method">;
   event: string;
   res: { body: Body; headers: Headers; status: number };
-} & Record<string | symbol, any>;
+
+  [key: string | symbol]: any;
+}

@@ -12,13 +12,15 @@
       "@nexiojs/node-adapter": ["../packages/node-adapter/src"],
       "@nexiojs/microservice": ["../packages/microservice/src"],
       "@nexiojs/deno-adapter": ["../packages/deno-adapter/src"],
-      "@nexiojs/plugins": ["../packages/plugins/src"]
+      "@nexiojs/plugins": ["../packages/plugins/src"],
+      "@nexiojs/serverless": ["../packages/serverless/src"]
     },
     "baseUrl": ".",
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["@cloudflare/workers-types"]
   },
   "ts-node": { "esm": true }
 }

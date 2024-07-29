@@ -3,6 +3,7 @@
   "packages": {
     "specifiers": {
       "npm:@apollo/gateway@^2.8.3": "npm:@apollo/gateway@2.8.3_graphql@16.9.0",
+      "npm:@cloudflare/workers-types": "npm:@cloudflare/workers-types@4.20240725.0",
       "npm:@faker-js/faker@^8.4.1": "npm:@faker-js/faker@8.4.1",
       "npm:@grpc/grpc-js": "npm:@grpc/grpc-js@1.11.1",
       "npm:@grpc/grpc-js@^1.11.1": "npm:@grpc/grpc-js@1.11.1",
@@ -158,6 +159,10 @@
         "dependencies": {
           "regenerator-runtime": "regenerator-runtime@0.14.1"
         }
+      },
+      "@cloudflare/workers-types@4.20240725.0": {
+        "integrity": "sha512-L6T/Bg50zm9IIACQVQ0CdVcQL+2nLkRXdPz6BsXF3SlzgjyWR5ndVctAbfr/HLV7aKYxWnnEZsIORsTWb+FssA==",
+        "dependencies": {}
       },
       "@cspotcode/source-map-support@0.8.1": {
         "integrity": "sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==",
@@ -2353,6 +2358,7 @@
   "remote": {},
   "workspace": {
     "dependencies": [
+      "npm:@cloudflare/workers-types",
       "npm:@grpc/grpc-js",
       "npm:@grpc/proto-loader",
       "npm:grpc-reflection-js",
@@ -2367,6 +2373,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@apollo/gateway@^2.8.3",
+        "npm:@cloudflare/workers-types@^4.20240725.0",
         "npm:@faker-js/faker@^8.4.1",
         "npm:@grpc/grpc-js@^1.11.1",
         "npm:@grpc/reflection@^1.0.4",
