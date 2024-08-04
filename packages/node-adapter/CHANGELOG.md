@@ -1,5 +1,13 @@
 # @nexiojs/node-adapter
 
+## 0.0.9
+
+### Patch Changes
+
+- serverless plugin
+- Updated dependencies
+  - @nexiojs/common@0.0.9
+
 ## 0.0.8
 
 ### Patch Changes

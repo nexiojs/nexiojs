@@ -31,8 +31,6 @@ export class CloudflareAdapter extends Adapter {
       context,
     };
 
-    console.log(ctx.event);
-
     await application.emitAsync(ctx.event, ctx).catch((err) => {
       ctx.res.body = err.message;
       ctx.res.status = err.statusCode;
