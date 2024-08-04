@@ -1,7 +1,7 @@
 {
   "name": "@nexiojs/core",
   "type": "module",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsup --config ../../config.ts",
