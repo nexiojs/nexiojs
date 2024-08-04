@@ -1,5 +1,11 @@
 # @nexiojs/common
 
+## 0.0.9
+
+### Patch Changes
+
+- serverless plugin
+
 ## 0.0.8
 
 ### Patch Changes
