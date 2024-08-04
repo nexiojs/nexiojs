@@ -1,5 +1,11 @@
 # @nexiojs/common
 
+## 0.0.10
+
+### Patch Changes
+
+- remove logger
+
 ## 0.0.9
 
 ### Patch Changes
