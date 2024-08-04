@@ -1,6 +1,4 @@
 import { beforeAll, describe, expect, it, jest } from "bun:test";
-import { Call } from "../../src/decorators/call.decorator.ts";
-import { Context } from "../../src/decorators/context.decorator.ts";
 import { Injectable } from "../../src/decorators/injectable.decorator.ts";
 import { resolveDI } from "../../src/dependency-injection/resolve.ts";
 

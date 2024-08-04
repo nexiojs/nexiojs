@@ -8,6 +8,7 @@
     "@nexiojs/graphql": "../packages/graphql/src/index.ts",
     "@nexiojs/deno-adapter": "../packages/deno-adapter/src/index.ts",
     "@nexiojs/plugins": "../packages/plugins/src/index.ts",
+    "@nexiojs/serverless": "../packages/serverless/src/index.ts",
     "reflect-metadata": "npm:reflect-metadata",
     "lodash.merge": "npm:lodash.merge",
     "grpc-reflection-js": "npm:grpc-reflection-js",
@@ -17,7 +18,9 @@
     "zod": "npm:zod",
     "long": "npm:long",
     "@grpc/grpc-js": "npm:@grpc/grpc-js",
-    "@grpc/proto-loader": "npm:@grpc/proto-loader"
+    "@grpc/proto-loader": "npm:@grpc/proto-loader",
+    "@cloudflare/workers-types": "npm:@cloudflare/workers-types",
+    "query-string": "npm:query-string"
   },
   "compilerOptions": {
     "experimentalDecorators": true,

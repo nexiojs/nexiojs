@@ -112,7 +112,6 @@ export class NexioEventEmitter extends IEventEmitter<IContext> {
   }
 
   private async handlePreGlobalInterceptor(@Context() ctx: IContext) {
-    console.log(this.interceptors);
     await Promise.chain(
       this.interceptors.map((interceptor: IInterceptor) => interceptor.pre(ctx))
     );

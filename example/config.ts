@@ -8,6 +8,7 @@ export default defineConfig({
     "./packages/gateway/main.ts",
     "./packages/post-application/main.ts",
     "./packages/user-application/main.ts",
+    "./packages/serverless/cloudflare.ts",
   ],
   format: ["esm", "cjs"],
   platform: "node",

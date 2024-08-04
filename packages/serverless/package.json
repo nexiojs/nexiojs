@@ -1,0 +1,48 @@
+{
+  "name": "@nexiojs/serverless",
+  "type": "module",
+  "version": "0.0.9",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsup --config ../../config.ts",
+    "test": "bun test --preload ./test/setup.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240725.0",
+    "@types/bun": "^1.1.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "wrangler": "^3.67.1"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typings": "dist/index.d.ts",
+  "buildOptions": {
+    "input": "./src/index.ts"
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "dependencies": {
+    "@nexiojs/common": "workspace:*",
+    "@nexiojs/core": "workspace:*"
+  }
+}

@@ -38,5 +38,9 @@
   ],
   "resolutions": {
     "graphql": "16.9.0"
+  },
+  "dependencies": {
+    "pino": "^9.3.2",
+    "query-string": "^9.1.0"
   }
 }

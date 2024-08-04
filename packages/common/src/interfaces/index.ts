@@ -5,4 +5,5 @@ export * from "./constructor.interface.ts";
 export * from "./context.interface.ts";
 export * from "./interceptor.interface.ts";
 export * from "./listener.interface.ts";
+export * from "./logger.interface.ts";
 export * from "./plugin.interface.ts";
